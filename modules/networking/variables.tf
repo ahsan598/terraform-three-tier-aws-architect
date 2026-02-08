@@ -18,7 +18,7 @@ variable "availability_zones" {
   type        = list(string)
 }
 
-variable "public_subnets_web" {
+variable "public_subnets_alb" {
   description = "Public subnet CIDRs (same length as availability zones)"
   type        = list(string)
 }

@@ -11,9 +11,9 @@ output "vpc_igw_id" {
   value       = module.aws_vpc.vpc_igw_id
 }
 
-output "public_subnet_web_ids" {
+output "public_subnet_alb_ids" {
   description = "List of public subnet IDs"
-  value       = module.aws_vpc.public_subnet_web_ids
+  value       = module.aws_vpc.public_subnet_alb_ids
 }
 
 output "private_subnet_app_ids" {

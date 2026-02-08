@@ -23,17 +23,17 @@ resource "aws_internet_gateway" "vpc_igw" {
 }
 
 # ============================
-# PUBLIC SUBNET (WEB TIER)
+# PUBLIC SUBNET (ALB)
 # ============================
-resource "aws_subnet" "public_web" {
-  for_each                = local.public_subnet_map_web
+resource "aws_subnet" "public_alb" {
+  for_each                = local.public_subnet_map_alb
   vpc_id                  = aws_vpc.main_vpc.id
   cidr_block              = each.value
   availability_zone       = each.key
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.project_name}-public-web-${each.key}"
+    Name = "${var.project_name}-public-alb-${each.key}"
     Tier = "public"
   }
 }
@@ -41,7 +41,7 @@ resource "aws_subnet" "public_web" {
 # ==================================
 # PUBLIC ROUTE TABLE & ASSOCIATION
 # ==================================
-resource "aws_route_table" "public_rt" {
+resource "aws_route_table" "public_rt_alb" {
   vpc_id = aws_vpc.main_vpc.id
 
   route {
@@ -50,14 +50,14 @@ resource "aws_route_table" "public_rt" {
   }
 
   tags = {
-    Name = "${var.project_name}-public-web-rt"
+    Name = "${var.project_name}-public-alb-rt"
   }
 }
 
 resource "aws_route_table_association" "public_assoc" {
-  for_each       = aws_subnet.public_web
+  for_each       = aws_subnet.public_alb
   subnet_id      = each.value.id
-  route_table_id = aws_route_table.public_rt.id
+  route_table_id = aws_route_table.public_rt_alb.id
 }
 
 # ============================
@@ -73,7 +73,7 @@ resource "aws_eip" "nat" {
 
 resource "aws_nat_gateway" "public_nat" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.public_web[var.availability_zones[0]].id
+  subnet_id     = aws_subnet.public_alb[var.availability_zones[0]].id
 
   depends_on = [aws_internet_gateway.vpc_igw]
 

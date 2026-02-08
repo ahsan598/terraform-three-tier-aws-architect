@@ -8,9 +8,9 @@ output "vpc_igw_id" {
   value       = aws_internet_gateway.vpc_igw.id
 }
 
-output "public_subnet_web_ids" {
+output "public_subnet_alb_ids" {
   description = "List of public subnet IDs"
-  value       = [for s in aws_subnet.public_web : s.id]
+  value       = [for s in aws_subnet.public_alb : s.id]
 }
 
 output "private_subnet_app_ids" {
