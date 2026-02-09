@@ -53,3 +53,21 @@ variable "private_subnets_db" {
   description = "Private subnet CIDRs (same length as availability zones)"
   type        = list(string)
 }
+
+# ============================================
+# Security Group Variables
+# ============================================
+variable "app_port" {
+  description = "Port on which the application listens"
+  type        = number
+}
+
+variable "db_port" {
+  description = "Port on which the database listens"
+  type        = number
+}
+
+variable "enable_https" {
+  description = "Enable HTTPS ingress rule for ALB"
+  type        = bool
+}
